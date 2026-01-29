@@ -157,7 +157,6 @@ func (svc *Service) reload() {
 	err = svc.inst.Destroy()
 	if err != nil {
 		svc.logger.Error("failed to destroy previous instance", "error", err)
-		return
 	}
 
 	// Start new instance

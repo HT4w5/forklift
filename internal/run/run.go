@@ -4,13 +4,16 @@ import (
 	"encoding/json"
 	"os"
 	"os/exec"
+	"syscall"
+	"time"
 
 	"github.com/HT4w5/forklift/internal/config"
 )
 
 const (
-	tempDirPrefix  = "forklift-"
-	configFileName = "/config.json"
+	tempDirPrefix   = "forklift-"
+	configFileName  = "/config.json"
+	shutdownTimeout = time.Second * 10
 )
 
 // Represents a running sing-box instance
@@ -83,10 +86,30 @@ func (in *Inst) Destroy() error {
 	// Clean up tempDir in the end
 	defer os.RemoveAll(in.tempDir)
 
-	err := in.cmd.Process.Kill()
-	if err != nil {
+	if in.cmd.Process == nil {
+		return nil
+	}
+
+	err := in.cmd.Process.Signal(syscall.SIGTERM)
+	if err != nil && err != os.ErrProcessDone {
 		return err
 	}
 
-	return in.cmd.Wait()
+	done := make(chan error, 1)
+	go func() {
+		done <- in.cmd.Wait()
+	}()
+
+	timer := time.NewTimer(shutdownTimeout)
+	defer timer.Stop()
+
+	select {
+	case <-done:
+		return nil
+	case <-timer.C:
+		if killErr := in.cmd.Process.Kill(); killErr != nil && killErr != os.ErrProcessDone {
+			return killErr
+		}
+		return nil
+	}
 }
