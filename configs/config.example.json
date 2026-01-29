@@ -1,0 +1,36 @@
+{
+    "log": {
+        "level": "",
+        "output": "",
+        "syslog": {
+            "transport": "",
+            "addr": ""
+        }
+    },
+    "profile": {
+        "url": "",
+        "update": "",
+        "patches": [
+            "patch1"
+        ],
+        "log_cap": {
+            "enabled": true,
+            "output": "",
+            "syslog": {
+                "transport": "",
+                "addr": ""
+            }
+        }
+    },
+    "patches": [
+        {
+            "tag": "patch1",
+            "content": {
+                "+foo": [
+                    "bar1",
+                    "bar2"
+                ]
+            }
+        }
+    ]
+}
