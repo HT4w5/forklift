@@ -5,11 +5,11 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/HT4w5/song/internal/config"
+	"github.com/HT4w5/forklift/internal/config"
 )
 
 const (
-	tempDirPrefix  = "song-"
+	tempDirPrefix  = "forklift-"
 	configFileName = "/config.json"
 )
 

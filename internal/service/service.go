@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/HT4w5/song/internal/config"
-	"github.com/HT4w5/song/internal/run"
+	"github.com/HT4w5/forklift/internal/config"
+	"github.com/HT4w5/forklift/internal/run"
 	"github.com/go-co-op/gocron/v2"
 )
 

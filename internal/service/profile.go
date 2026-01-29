@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/HT4w5/song/pkg/fetch"
-	"github.com/HT4w5/song/pkg/patch"
+	"github.com/HT4w5/forklift/pkg/fetch"
+	"github.com/HT4w5/forklift/pkg/patch"
 )
 
 const (

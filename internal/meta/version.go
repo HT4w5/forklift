@@ -3,7 +3,7 @@ package meta
 import "fmt"
 
 var (
-	Name       = "song"
+	Name       = "forklift"
 	BuildDate  string
 	CommitHash string
 	Version    string
