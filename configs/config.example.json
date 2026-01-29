@@ -1,26 +1,18 @@
 {
     "log": {
-        "level": "",
-        "output": "",
-        "syslog": {
-            "transport": "",
-            "addr": ""
-        }
+        "level": ""
+    },
+    "exec": {
+        "path": "/usr/bin/sing-box",
+        "log_fwd": true
     },
     "profile": {
         "url": "",
         "update": "",
+        "ua": "",
         "patches": [
             "patch1"
-        ],
-        "log_cap": {
-            "enabled": true,
-            "output": "",
-            "syslog": {
-                "transport": "",
-                "addr": ""
-            }
-        }
+        ]
     },
     "patches": [
         {

@@ -8,29 +8,37 @@ import (
 type Config struct {
 	Log     LogConfig     `json:"log"`
 	Profile ProfileConfig `json:"profile"`
+	Exec    ExecConfig    `json:"exec"`
 	Patches []PatchConfig `json:"patches"`
 }
 
 type LogConfig struct {
-	Level  string       `json:"level"`
-	Output string       `json:"output"`
-	Syslog SyslogConfig `json:"syslog"`
+	Level string `json:"level"`
+}
+
+type ExecConfig struct {
+	Path   string `json:"path"`    // Path to sing-box binary. Defaults to "sing-box"
+	LogFwd bool   `json:"log_fwd"` // Forward log to stdout
 }
 
 type ProfileConfig struct {
 	URL     string   `json:"url"`
-	Update  Duration `json:"update"`
+	Update  string   `json:"update"`
+	UA      string   `json:"ua"`
 	Patches []string `json:"patches"`
-	LogCap  struct {
-		Enabled bool         `json:"enabled"`
-		Output  string       `json:"output"`
-		Syslog  SyslogConfig `json:"syslog"`
-	}
 }
 
 type PatchConfig struct {
 	Tag     string `json:"tag"`
 	Content any    `json:"content"`
+}
+
+func Default() *Config {
+	return &Config{
+		Exec: ExecConfig{
+			Path: "sing-box",
+		},
+	}
 }
 
 func (c *Config) Load(path string) error {
