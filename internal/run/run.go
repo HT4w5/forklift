@@ -2,6 +2,7 @@ package run
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"os/exec"
 	"syscall"
@@ -75,6 +76,19 @@ func Create(cfg config.ExecConfig, profile any) (*Inst, error) {
 		return nil, err
 	}
 
+	// Check if process exited immediately
+	exited := make(chan error, 1)
+	go func() {
+		exited <- cmd.Wait()
+	}()
+
+	select {
+	case err := <-exited:
+		os.RemoveAll(tempDir) // Clean up temp directory
+		return nil, fmt.Errorf("process exited immediately: %w", err)
+	case <-time.After(10 * time.Second):
+	}
+
 	return &Inst{
 		cfg:     cfg,
 		tempDir: tempDir,
@@ -100,13 +114,10 @@ func (in *Inst) Destroy() error {
 		done <- in.cmd.Wait()
 	}()
 
-	timer := time.NewTimer(shutdownTimeout)
-	defer timer.Stop()
-
 	select {
 	case <-done:
 		return nil
-	case <-timer.C:
+	case <-time.After(shutdownTimeout):
 		if killErr := in.cmd.Process.Kill(); killErr != nil && killErr != os.ErrProcessDone {
 			return killErr
 		}
